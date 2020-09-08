@@ -1,0 +1,31 @@
+
+
+body {
+    margin: 20px 40px;
+}
+
+.image-wrapper {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    width: 300px;
+    height: 300px;
+    overflow: hidden;
+}
+
+img {
+    height: 100%;
+}
+
+input, .form-control {
+    width: 200px;
+    margin-top: 10px;
+}
+
+.form-group {
+    margin-bottom: 0;
+}
+
+.listing__stats {
+    margin-top: 10px;
+}

@@ -1,0 +1,15 @@
+body { 
+    padding-top: 20px;
+}
+
+textarea {
+    height: 400px;
+}
+
+.form-control {
+    width: 300px;
+}
+
+.margin-top10 {
+    margin-top: 10px;
+}

@@ -1,0 +1,79 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2> {{ listing.title }}</h2>
+
+    <div class="image-wrapper">
+
+        {% if listing.image %}
+            <img src="{{listing.image}}" alt="listing-image">
+        {% else %}
+            {% load static %}
+            <img src="{% static 'auctions/placeholder-image.png' %}" alt="listing-image">
+        {% endif %}
+    </div>
+
+    <ul class="listing__stats">
+        <li> description: {{ listing.description }}</li>
+        <li> bid: {{listing.bid}}</li>
+        <li> bidder: {{listing.bidder}}</li>
+        <li> creator: {{listing.creator}}</li>
+        <li> category: {{listing.category}}</li>
+    </ul>
+
+    {% if listing.creator == user.username and listing.bidder != 'none' and listing.active %}
+        <form action="{% url 'listing' listing.title %}" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <input class="form-control" type="hidden" name="winner" value="{{listing.bidder}}" >
+            </div>
+            <input class="btn btn-primary" type="submit" value="close auction">
+        </form>
+    {% endif %}
+
+    {% if user.is_authenticated and listing.active %}
+        <!-- watchlist -->
+        <form action="{% url 'watchlist' user.username %}" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <input class="form-control" type="hidden" name="watchlist_username" value="{{user.username}}" >
+                <input class="form-control" type="hidden" name="watchlist_title" value="{{listing.title}}" >
+            </div>
+            <input class="btn btn-primary" type="submit" value="add to watchlist">
+        </form>
+    {% endif %}
+
+    {% if not listing.active %}
+        <h2>winner: {{listing.bidder}}</h2>
+    {% endif %}
+
+    {% if user.is_authenticated and listing.creator != user.username and listing.active %}
+        <form action="{% url 'listing' listing.title %}" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <input class="form-control" autofocus type="number" name="bid" placeholder="bid">
+                <input class="form-control" type="hidden" name="bidder" value="{{user.username}}" >
+            </div>
+            <input class="btn btn-primary" type="submit" value="place bid">
+        </form>
+    {% endif %}
+
+    {% if user.is_authenticated and listing.active %}
+        <!-- comment -->
+        <form action="{% url 'listing' listing.title %}" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <input class="form-control" type="hidden" name="username" value="{{user.username}}">
+                <input class="form-control" type="text" name="comment" placeholder="comment" >
+            </div>
+            <input class="btn btn-primary" type="submit" value="send">
+        </form>
+
+        <h2>Comments</h2>
+        <ul style="list-style: none;">
+        {% for comment in comments %}
+            <li> {{ comment.comment_user }}: {{ comment.comment_text }} </li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

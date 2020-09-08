@@ -1,0 +1,44 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Active Listings</h2>
+
+        <ul style="list-style: none;">
+        {% for listing in listings %}
+            {% if listing.active %}
+            <li>
+                <div class="image-wrapper">
+                    {% if listing.image %}
+                        <img src="{{listing.image}}" alt="listing-image">
+                    {% else %}
+                        {% load static %}
+                        <img src="{% static 'auctions/placeholder-image.png' %}" alt="listing-image">
+                    {% endif %}
+                </div>
+                <a href="{% url 'listing' listing.title %}">{{ listing.title }}: {{ listing.description }}</a>
+            </li>
+            {% endif %}
+        {% endfor %}
+        </ul>
+
+    <h2>Closed Listings</h2>
+
+        <ul style="list-style: none;">
+        {% for listing in listings %}
+            {% if not listing.active %}
+            <li>
+                <div class="image-wrapper">
+                    {% if listing.image %}
+                        <img src="{{listing.image}}" alt="listing-image">
+                    {% else %}
+                        {% load static %}
+                        <img src="{% static 'auctions/placeholder-image.png' %}" alt="listing-image">
+                    {% endif %}
+                </div>
+                <a href="{% url 'listing' listing.title %}">{{ listing.title }}: {{ listing.description }}</a>
+            </li>
+            {% endif %}
+        {% endfor %}
+        </ul>
+
+{% endblock %}
